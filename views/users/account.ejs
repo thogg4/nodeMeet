@@ -1,0 +1,51 @@
+<div class="page-header">
+  <h1>Account</h1>
+</div>
+<div class="row-fluid">
+  
+  <div class="span6">
+    <div class="page-header">
+      <h3>Info</h3>
+    </div>
+    <form action="/update" class="well">
+      <input type="email" value="<%- user.email %>" />
+      <div class="controls">
+        <input type="submit" class="btn btn-success" value="Update" />
+      </div>
+    </form>
+  </div>
+  
+  <div class="span6">
+    <div class="page-header">
+      <h3>Create Event</h3>
+    </div>
+    
+    <form action="/new-event" method="post" class="well">
+      
+      <label for="time">Time</label>
+      <input type="text" name="time" class="span2" placeholder="Ex: 9" />
+      <select name="meridian" class="span1">
+        <option value="am">AM</option>
+        <option value="pm">PM</option>
+      </select>
+      
+      
+      
+      <label for="handicap">Handicap:</label>
+      <select name="something-then" class="span1">
+        <option value="greater-than">></option>
+        <option value="less-than"><</option>
+        <option value="equal-to">=</option>
+      </select>
+      <input type="text" name="handicap" placeholder="Ex: 5" />
+      
+      <div class="controls">
+        <input type="submit" class="btn btn-success" value="Create Event" />
+      </div>
+      
+    </form>
+    
+    
+  </div>
+  
+</div>
