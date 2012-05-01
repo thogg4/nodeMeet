@@ -28,7 +28,7 @@ app.configure(function(){
 
 //db stuff
 var collections = ["users", "events"]
-var db = require("mongojs").connect("nodemeet", collections)
+var db = require("mongojs").connect("mongodb://thogg4:yankeesq1@staff.mongohq.com:10076/nodemeet", collections)
 
 
 
