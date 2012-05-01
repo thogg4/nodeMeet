@@ -100,9 +100,11 @@ app.get("/", function(req, res) {
     db.events.find(function(eventErr, events) {
       if (userErr) {
         console.log("user error")
+        console.log(userErr)
       } else {
         if (eventErr) {
           console.log("event error")
+          console.log(eventErr)
         } else {
           res.render("index", {
             request: req,
