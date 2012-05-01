@@ -1,14 +1,18 @@
 <div class="page-header">
   <h1>Account</h1>
 </div>
-<div class="row-fluid">
+<div class="row">
   
   <div class="span6">
     <div class="page-header">
       <h3>Info</h3>
     </div>
-    <form action="/update" class="well">
-      <input type="email" value="<%- user.email %>" />
+    <form action="/update-user" method="post" class="well">
+      <label>Email</label>
+      <input type="email" name="email" value="<%- user.email %>" />
+      
+      <label>Handicap</label>
+      <input type="handicap" name="handicap" value="<%- user.handicap %>" />
       <div class="controls">
         <input type="submit" class="btn btn-success" value="Update" />
       </div>
@@ -22,20 +26,20 @@
     
     <form action="/new-event" method="post" class="well">
       
+      <input type="hidden" value="<%- user.username %>" name="username" />
+      
       <label for="time">Time</label>
       <input type="text" name="time" class="span2" placeholder="Ex: 9" />
-      <select name="meridian" class="span1">
+      <select name="ampm" class="span1">
         <option value="am">AM</option>
         <option value="pm">PM</option>
       </select>
       
-      
-      
       <label for="handicap">Handicap:</label>
-      <select name="something-then" class="span1">
-        <option value="greater-than">></option>
-        <option value="less-than"><</option>
-        <option value="equal-to">=</option>
+      <select name="somethingthan" class="span1">
+        <option value=">">></option>
+        <option value="<"><</option>
+        <option value="=">=</option>
       </select>
       <input type="text" name="handicap" placeholder="Ex: 5" />
       
@@ -49,3 +53,34 @@
   </div>
   
 </div>
+
+<div class="row">
+  <div class="span6">
+    <div class="page-header">
+      <h3>My Events</h3>
+    </div>  
+    
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Time</th>
+          <th>Handicap</th>
+        </tr>
+      </thead>
+      
+      <tbody>
+        <% for (var i = 0; i < events.length; i++) { %>
+        <% var event = events[i] %>
+          <tr>
+            <td><%- event.time %> <%- event.ampm %></td>
+            <td><%- event.somethingthan %> <%- event.handicap %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+  </div>
+  
+  
+  <div class="span6"></div>
+</div>
+

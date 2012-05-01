@@ -3,6 +3,7 @@
   <head>
     <title>nodeMeet</title>
     <link rel="stylesheet" href="stylesheets/bootstrap.css" type="text/css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="stylesheets/style.css" type="text/css" media="screen" title="no title" charset="utf-8">
   </head>
   <body>
     <div class="navbar">
@@ -21,7 +22,11 @@
         </div>
       </div>
     </div>    
-
+    
+    <div class="container">
+      <%- body %>
+    </div>
+    
     <% if (typeof(flash) != "undefined") { %>
       <% if (flash.success) { %>
         <div class="alert alert-success">
@@ -35,9 +40,6 @@
       <% } %>
     <% } %>
     
-    <div class="container">
-      <%- body %>
-    </div>
     <script type="text/javascript" src="javascripts/jquery.js"></script>
     <script type="text/javascript" src="javascripts/script.js"></script>
   </body>

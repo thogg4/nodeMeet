@@ -1,2 +1,55 @@
-
-
+<div class="row">
+  
+  <div class="span6">
+    <div class="page-header">
+      <h2>Members</h2>
+    </div>
+    
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Member</th>
+          <th>Handicap</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i = 0; i < users.length; i++) { %>
+        <% var user = users[i] %>
+          <tr>
+            <td><%- user.username %></td>
+            <td><%- user.handicap %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+    
+  </div>
+  
+  <div class="span6">
+    <div class="page-header">
+      <h2>Events</h2>
+    </div>
+    
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Host</th>
+          <th>Time</th>
+          <th>Handicap</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% for (var i = 0; i < events.length; i++) { %>
+        <% var event = events[i] %>
+          <tr>
+            <td><%- event.username %></td>
+            <td><%- event.time %></td>
+            <td><%- event.somethingthan %> <%- event.handicap %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>
+    
+  </div>
+  
+</div>

@@ -27,7 +27,7 @@ app.configure(function(){
 
 
 //db stuff
-var collections = ["users"]
+var collections = ["users", "events"]
 var db = require("mongojs").connect("nodemeet", collections)
 
 
@@ -96,13 +96,26 @@ app.configure('production', function(){
 
 // routes
 app.get("/", function(req, res) {
-  console.log(req.flash)
-  res.render("index", {
-    request: req,
-    response: res,
-    locals: {
-      flash: req.flash()
-    }
+  db.users.find(function(userErr, users) {
+    db.events.find(function(eventErr, events) {
+      if (userErr) {
+        console.log("user error")
+      } else {
+        if (eventErr) {
+          console.log("event error")
+        } else {
+          res.render("index", {
+            request: req,
+            response: res,
+            events: events,
+            users: users,
+            locals: {
+              flash: req.flash()
+            }
+          })
+        }
+      }
+    })
   })
 })
 
@@ -148,7 +161,8 @@ app.post("/signup", function(req, res) {
         db.users.save({
           username: req.param("username"),
           email: req.param("email"),
-          password: db.encodePassword(req.param("password"))
+          password: db.encodePassword(req.param("password")),
+          handicap: req.param("handicap")
       
         }, function(err, saved) {
           if ( err || !saved ) {
@@ -168,40 +182,42 @@ app.post("/signup", function(req, res) {
     
   } catch(e) {
     
-  } 
-  
+  }
 })
+
+app.post("/update-user", function(req, res) {
+  
+  db.users.update({"username": req.session.username}, {$set: {
+    email: req.body.email,
+    handicap: req.body.handicap 
+  }})
+  
+  req.flash("success", "user updated")
+  res.redirect("/account")
+})
+
+
 app.get("/account", function(req, res) {
-  db.users.find({"username": req.session.username}, function(err, user) {
-    if (err) {
-      return
-    } else {
-      
-      options = {
-        host: "api.meetup.com",
-        path: "/2/events?key=6d45643a7e7a5636d2844e5d506871&sign=true&group_urlname=NodeMeet",
-        method: "GET"
-      }
-      
-      meetupCall = http.request(options, function(res) {
-        res.on('data', function (chunk) {
-          console.log('BODY: ' + chunk)
-        })
-      })
-      meetupCall.on('error', function(e) {
-        console.log('problem with request: ' + e.message)
-      })
-      meetupCall.end();
-      
-      res.render("users/account", {
-        request: req,
-        response: res,
-        user: user[0],
-        locals: {
-          flash: req.flash()
+  db.users.find({"username": req.session.username}, function(userErr, user) {
+    db.events.find({"username": req.session.username}, function(eventErr, events) {
+      if (userErr) {
+        console.log("user error")
+      } else {
+        if (eventErr) {
+          console.log("event error")
+        } else {
+          res.render("users/account", {
+            request: req,
+            response: res,
+            user: user[0],
+            events: events,
+            locals: {
+              flash: req.flash()
+            }
+          })
         }
-      })
-    }
+      }
+    })
   })
 })
 
@@ -209,23 +225,22 @@ app.get("/account", function(req, res) {
 
 
 // event routes
-app.post("/new-event", function(req, res) {
-  options = {
-    host: "api.meetup.com",
-    path: "/2/events?key=6d45643a7e7a5636d2844e5d506871",
-    method: "POST"
-  }
-  
-  console.log(options)
-  console.log(req.body)
-  // console.log(req.param(meridian))
-  // console.log(req.param(something-then))
-  // console.log(req.param(handicap))
-  
-  //TODO: create meetup group, and connect here
-  
-  res.send("worked")
-  
+app.post("/new-event", function(req, res) {  
+  db.events.save({
+    username: req.body.username,
+    time: req.body.time,
+    ampm: req.body.ampm,
+    somethingthan: req.body.somethingthan,
+    handicap: req.body.handicap
+  }, function(err, saved) {
+    if ( err || !saved ) {
+      req.flash("error", "Event not saved, for some unknown reason")
+      res.redirect("/")
+    } else { 
+      req.flash("success", "Event saved")
+      res.redirect("/account") 
+    }
+  })
 })
 
 
